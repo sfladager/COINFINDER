@@ -1,0 +1,44 @@
+* {
+  margin: 0;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+h1 {
+  margin: 0 auto;
+  text-align: center;
+}
+
+main {
+height: 100vh;
+}
+
+.grid, .gameContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.grid {
+  height: 600px;
+  width: 600px;
+  flex-wrap: wrap;
+  /* background-color: black; */
+}
+
+.grid div {
+  border: 1px solid lightgrey;
+  flex-grow: 1;
+  height: calc(100% / 20);
+  width: calc(100% / 20)
+}
+
+.walls {
+  background-color: orange;
+}
+
+section {
+  display: flex;
+  justify-content: space-between;
+  max-width: 600px;
+  margin: 0 auto;
+}
