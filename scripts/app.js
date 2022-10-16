@@ -18,15 +18,15 @@ function init() {
 
   // ? ELEMENTS
   //start button
-  // high score
-  // score
+  const scoreDisplay = document.getElementById('score')
   // lives left
   // level
   const grid = document.querySelector('.grid')
 
   // ? VARIABLES
   // timer
-  // score
+  let highScore = 0
+  let score = 0
   // lives
   // level
 
@@ -41,6 +41,7 @@ function init() {
   // ? CHARACTER VARIABLES
   const startingPosition = 270
   let currentPosition = startingPosition
+  
   //ghost1Start
   //ghost2Start
   //ghost3Start
@@ -70,6 +71,7 @@ function init() {
   //conditional logic to create walls
   cells.some(cell => {
     const wall = cell.dataset.index
+    
     //center walls
     if (wall % 10 === 0 && wall <= 70 || wall % 10 === 0 &&
       wall >= 110 && wall <= 160) {
@@ -111,10 +113,18 @@ function init() {
     if (wall == 304 || wall == 316 || wall == 114 || wall == 234 || wall == 254) {
       cell.classList.add('walls')
     }
+    if (wall == 190 || wall > 208 && wall < 212 || 
+      wall > 228 && wall < 232) {
+      cell.classList.add('enemyHome')
+    }
    
-    if (!cell.classList.contains('walls')) {
+    if (!cell.classList.contains('walls') && wall != 190 && wall != 211
+    && wall != 210 && wall != 209 && wall != 229 && wall != 220 && 
+    wall != 230 && wall != 231) {
       cell.classList.add('coin')
     }
+    
+    
     
   })
 
@@ -145,14 +155,10 @@ function init() {
     cells[position].classList.remove('punk')
   }
   
-
-
-    //add class trader to display the trader at start position
-  
-  //function removetrader
-  //remove class trader from grid
-
-  //function addGhost1
+  function addGhost1() {
+    cells[210].classList.add('cyborg1')
+  }
+  addGhost1()
     //add class addGhost1 to display the addGhost1 at start position
 
   //function removeGhost1
@@ -176,6 +182,14 @@ function init() {
         //ghostsBlue()
 
   // !FUNCTIONS MOVEMENT
+  function removeCoin() {
+    if (cells[currentPosition].classList.contains('coin')) {
+      cells[currentPosition].classList.remove('coin')
+      score += 10
+      scoreDisplay.innerText = score
+    }
+  }
+  
 
   function handleMovement(e) {
     const checkMoveRight = cells[currentPosition + 1].classList.contains('walls')
@@ -188,7 +202,7 @@ function init() {
     const left = 37
     const right = 39
     removePunk(currentPosition)
-
+    removeCoin()
     if (key === right && !checkMoveRight) {
       currentPosition++
     } else if (key === left && !checkMoveLeft) {

@@ -47,13 +47,25 @@ section {
   margin: 0 auto;
 }
 
+.coin {
+  background-image: url(../assets/bitcoin.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #000;
+  z-index: -1;
+}
+
 .punk {
   /* background-position: center; */
   background-size: cover;
   background-image: url(../assets/sprites/Punk/Punk_idle.png);
   animation: play .8s steps(4) infinite;
 }
+.enemyHome {
+  background-color: rgb(102, 97, 97);
+}
 
-.coin {
-  background-color: lightgrey;
+.cyborg1 {
+  background-image: url(../assets/sprites/Cyborg/Cyborg_run.png);
+  background-size: cover;
 }
