@@ -18,6 +18,10 @@ height: 100vh;
   align-items: center;
 }
 
+/* .gameContainer {
+  background-color: #000;
+} */
+
 .grid {
   height: 600px;
   width: 600px;
@@ -41,4 +45,15 @@ section {
   justify-content: space-between;
   max-width: 600px;
   margin: 0 auto;
+}
+
+.punk {
+  /* background-position: center; */
+  background-size: cover;
+  background-image: url(../assets/sprites/Punk/Punk_idle.png);
+  animation: play .8s steps(4) infinite;
+}
+
+.coin {
+  background-color: lightgrey;
 }

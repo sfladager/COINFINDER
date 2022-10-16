@@ -39,8 +39,8 @@ function init() {
 
 
   // ? CHARACTER VARIABLES
-  //startingPosition = cell.data-index[]
-  //currentPosition
+  const startingPosition = 270
+  let currentPosition = startingPosition
   //ghost1Start
   //ghost2Start
   //ghost3Start
@@ -64,6 +64,7 @@ function init() {
       //push cell into an array
       cells.push(cell)
     }
+    addPunk(startingPosition)
   }
   createGrid()
   //conditional logic to create walls
@@ -79,20 +80,17 @@ function init() {
       cell.classList.add('walls')
     }
     //side cells
-    if (wall % 20 === 0 || 
-      (wall % 20 !== 9 && wall % 10 === 9)) {
+    if (wall % 20 === 0 && wall < 181 || wall % 20 === 0 && wall > 219 ||
+      wall % 20 !== 9 && wall % 10 === 9 && wall < 200 ||
+      wall % 20 !== 9 && wall % 10 === 9 && wall > 238) {
       cell.classList.add('walls')
     }
     if (wall % 20 === 6 && wall > 225 && wall < 247 || wall % 10 === 0 && wall > 289 && wall < 351) {
       cell.classList.add('walls')
     }
-    if (wall > 41 && wall < 45  || wall > 45  && wall < 49
-      || wall > 51 && wall < 55 || wall > 55 && wall < 58 || 
-      wall > 61 && wall < 65  || wall > 65  && wall < 69
-      || wall > 71 && wall < 75 || wall > 75 && wall < 78) {
-      cell.classList.add('walls')
-    }
-    if (wall > 101 && wall < 105 || wall > 107 && wall < 113 ||
+    if (wall > 41 && wall < 45 || wall > 45  && wall < 49 || wall > 51 && wall < 55 || 
+      wall > 55 && wall < 58 || wall > 61 && wall < 65 || wall > 101 && wall < 105 || 
+      wall > 65  && wall < 69 || wall > 107 && wall < 113 || wall > 71 && wall < 75 || wall > 75 && wall < 78 ||
       wall > 115 && wall < 118 || wall > 140 && wall < 145 || wall > 146 && wall < 149 || 
       wall > 151 && wall < 154 || wall > 155 && wall < 159 || wall > 160 && wall < 165 || 
       wall > 175 && wall < 179 || wall > 180 && wall < 184 ||
@@ -104,30 +102,26 @@ function init() {
       cell.classList.add('walls')
     }
     if (wall % 20 === 6 && wall > 86 && wall < 206 || wall % 10 === 4 && wall > 133 && wall < 195 ||
-       wall % 20 === 1 && wall > 340) {
+      wall % 20 === 1 && wall > 340) {
       cell.classList.add('walls')
     }
     if (wall % 20 === 8 && wall > 187 && wall < 268 || wall % 10 === 2 && wall > 211 && wall < 253) {
       cell.classList.add('walls')
     }
-    if (wall == 304 || wall == 316 || wall == 114) {
+    if (wall == 304 || wall == 316 || wall == 114 || wall == 234 || wall == 254) {
       cell.classList.add('walls')
     }
-
-    // if (!cell.classList.contains('walls')) {
-    //   cell.style.backgroundColor = 'grey'
-    // }
+   
+    if (!cell.classList.contains('walls')) {
+      cell.classList.add('coin')
+    }
     
   })
 
   
-    //for loop to create grid
-    //width = 25
-    //height = 28
-    //add class and dataset with id, appendchild, push cell into array cells
+    
 
-
-   //function createRails
+   //function createWalls
     // several for loop to create rails
     // add class rails to add styling
   
@@ -144,7 +138,15 @@ function init() {
 
   // ! CHARCTER FUNCTIONS
 
-  //function addtrader
+  function addPunk(position) {
+    cells[position].classList.add('punk')
+  }
+  function removePunk(position) {
+    cells[position].classList.remove('punk')
+  }
+  
+
+
     //add class trader to display the trader at start position
   
   //function removetrader
@@ -175,7 +177,33 @@ function init() {
 
   // !FUNCTIONS MOVEMENT
 
-  //function traderMovement
+  function handleMovement(e) {
+    const checkMoveRight = cells[currentPosition + 1].classList.contains('walls')
+    const checkMoveLeft = cells[currentPosition - 1].classList.contains('walls')
+    const checkMoveUp = cells[currentPosition - width].classList.contains('walls')
+    const checkMoveDown = cells[currentPosition + width].classList.contains('walls')
+    const key = e.keyCode
+    const up = 38
+    const down = 40
+    const left = 37
+    const right = 39
+    removePunk(currentPosition)
+
+    if (key === right && !checkMoveRight) {
+      currentPosition++
+    } else if (key === left && !checkMoveLeft) {
+      currentPosition--
+    } else if (key === up && !checkMoveUp) {
+      currentPosition -= width
+    } else if (key === down && !checkMoveDown) {
+      currentPosition += width
+    } else if (key === left && currentPosition === 200) {
+      currentPosition += width - 1
+    } else if (key === right && currentPosition === 219) {
+      currentPosition -= width - 1
+    }
+    addPunk(currentPosition)
+  }
     //downdown even listener
     //set movements to only go in allowed area
     //bonus to allow movement to go from appear form one side to another
@@ -289,9 +317,8 @@ function init() {
 
   // ? EVENTS
   //start game - run start game function and reset function
-  //keydown to move trader
-
-
+  document.addEventListener('keydown', handleMovement)
+  
 
 
 }
