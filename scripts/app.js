@@ -34,7 +34,6 @@ function init() {
   const height = 20
   const cellCount = width * height
   const cells = []
-  const allowedMoves = []
   
 
 
@@ -128,14 +127,7 @@ function init() {
       cell.classList.add('coin')
     }
   })
-  //removes coins from game and adds 10 points to score
-  function removeCoin() {
-    if (cells[currentPosition].classList.contains('coin')) {
-      cells[currentPosition].classList.remove('coin')
-      score += 10
-      scoreDisplay.innerText = score
-    }
-  }  
+  
   
   //function addPowerUps
     //add class powerUp to specified grid index
@@ -192,8 +184,7 @@ function init() {
 
   // !FUNCTIONS MOVEMENT
   
-  
-  addAllowedMoves()
+  //player movment
   function handleMovement(e) {
     const checkMoveRight = cells[currentPosition + 1].classList.contains('walls')
     const checkMoveLeft = cells[currentPosition - 1].classList.contains('walls')
@@ -221,15 +212,7 @@ function init() {
       currentPosition -= width - 1
     }
     addPunk(currentPosition)
-  }
-  //adds cells that are legal moves to an array
-  function addAllowedMoves() {
-    cells.filter(cell => {
-      if (!cell.classList.contains('walls')) {
-        allowedMoves.push(cell)
-      }
-    })
-  }
+  } 
   
   //starts movement of ghost after 3 seconds
   setTimeout(releaseGhost, 3000)
@@ -240,33 +223,35 @@ function init() {
     down: +width,
   }
   const directionsArr = Object.keys(directions)
-  console.log(directionsArr)
-  console.log(directions['left'])
+  
   function ghostMovement() {
 
     const enemyMoves = setInterval(() => {
-      
-
       removeGhost1(ghost1Current)
-      const randPosition = Math.floor(Math.random() * directionsArr.length)
-      console.log('before', ghost1Current)
-      ghost1Current = ghost1Current + directions[directionsArr[randPosition]]
-      ///ghost potential position
-      console.log('after', ghost1Current)
+      let randPosition
+      
+      choosePosition()
+      
+      function choosePosition() {
+        randPosition = Math.floor(Math.random() * directionsArr.length)
+        console.log(randPosition)
+        const nextMove = ghost1Current + directions[directionsArr[randPosition]]
+        console.log(nextMove)
+
+        if (cells[nextMove].classList.contains('walls')) {
+          console.log('wall hit')
+          choosePosition()
+        } else if (cells[nextMove].classList.contains('enemyHome')){
+          console.log('tried to go home')
+          choosePosition()
+        } else {
+          ghost1Current = nextMove
+        }
+      }
       addGhost1(ghost1Current)
-      // while (check if potential position contains class wall)) {
-      
-        
-      // } else {
-      //   console.log('false move')
-      //   clearInterval(enemyMoves)
-      // }
-      
-      console.log(ghost1Current)
-      
+
     }, 5000)
-    
-    
+ 
   } 
   
   function releaseGhost() {
@@ -283,6 +268,7 @@ function init() {
       }
     }, 1000)
   }
+  
 
     //if ghost is in start box
       //run releaseGhost function (assigns ghost specific starting movement to get out of start box)
@@ -291,7 +277,14 @@ function init() {
 
 
   //! GAME FUNCTIONS
-
+  //removes coins from game and adds 10 points to score
+  function removeCoin() {
+    if (cells[currentPosition].classList.contains('coin')) {
+      cells[currentPosition].classList.remove('coin')
+      score += 10
+      scoreDisplay.innerText = score
+    }
+  }  
   //function getHighScore
     //get score from local storage on game load
 
