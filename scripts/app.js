@@ -1,10 +1,9 @@
 function init() {
   // ! STRATEGY FOR IMPLEMENTATION
-    //start with grid to get the layout setup in a basic form, add better style last
-    //add trader to grid and get functionality of movement working
-    //add coins to grid and get trader to gather them
+   
+   
     //create start game popup with button to start game, and instructions (story?)
-    //add ghost1 to starting position and get to leave box and randomly move around
+    //get ghost1 to randomly move around
     //add score update and life update function
     //add reset function when ghost catches trader and restart round if lives > 0, use alert for gameover
     //add powerUps to allow trader to eat ghost
@@ -35,14 +34,16 @@ function init() {
   const height = 20
   const cellCount = width * height
   const cells = []
-  //add if cells == this then add color or coins
+  const allowedMoves = []
+  
 
 
   // ? CHARACTER VARIABLES
   const startingPosition = 270
   let currentPosition = startingPosition
+  const ghost1Start = 210
+  let ghost1Current = ghost1Start
   
-  //ghost1Start
   //ghost2Start
   //ghost3Start
   //ghost1Current
@@ -66,9 +67,10 @@ function init() {
       cells.push(cell)
     }
     addPunk(startingPosition)
+    addGhost1(ghost1Start)
   }
   createGrid()
-  //conditional logic to create walls
+  //conditional logic to create walls and add coins
   cells.some(cell => {
     const wall = cell.dataset.index
     
@@ -113,40 +115,44 @@ function init() {
     if (wall == 304 || wall == 316 || wall == 114 || wall == 234 || wall == 254) {
       cell.classList.add('walls')
     }
+    //adds style to enemy home
     if (wall == 190 || wall > 208 && wall < 212 || 
       wall > 228 && wall < 232) {
       cell.classList.add('enemyHome')
     }
    
+    //adds coins to grid
     if (!cell.classList.contains('walls') && wall != 190 && wall != 211
     && wall != 210 && wall != 209 && wall != 229 && wall != 220 && 
     wall != 230 && wall != 231) {
       cell.classList.add('coin')
     }
-    
-    
-    
   })
-
+  //removes coins from game and adds 10 points to score
+  function removeCoin() {
+    if (cells[currentPosition].classList.contains('coin')) {
+      cells[currentPosition].classList.remove('coin')
+      score += 10
+      scoreDisplay.innerText = score
+    }
+  }  
   
-    
-
-   //function createWalls
-    // several for loop to create rails
-    // add class rails to add styling
-  
-  //function loadCoins
-    //add class coin to specified grid index
-
-  //function removeCoins
-    //remove class coin from specified grid index
-
   //function addPowerUps
     //add class powerUp to specified grid index
   //function removePowerUps
     //remove class powerUp from specified grid index
 
   // ! CHARCTER FUNCTIONS
+  class Enemy {
+    constructor(className, startingPosition) {
+      this.className = className
+      this.startingPosition = startingPosition
+    }
+  }
+
+  // const punk = new Character('punk', 270)
+  const cyborg1 = new Enemy('cyborg1', 210)
+
 
   function addPunk(position) {
     cells[position].classList.add('punk')
@@ -155,10 +161,13 @@ function init() {
     cells[position].classList.remove('punk')
   }
   
-  function addGhost1() {
-    cells[210].classList.add('cyborg1')
+  function addGhost1(position) {
+    cells[position].classList.add('cyborg1')
   }
-  addGhost1()
+
+  function removeGhost1(position) {
+    cells[position].classList.remove('cyborg1')
+  }
     //add class addGhost1 to display the addGhost1 at start position
 
   //function removeGhost1
@@ -182,15 +191,9 @@ function init() {
         //ghostsBlue()
 
   // !FUNCTIONS MOVEMENT
-  function removeCoin() {
-    if (cells[currentPosition].classList.contains('coin')) {
-      cells[currentPosition].classList.remove('coin')
-      score += 10
-      scoreDisplay.innerText = score
-    }
-  }
   
-
+  
+  addAllowedMoves()
   function handleMovement(e) {
     const checkMoveRight = cells[currentPosition + 1].classList.contains('walls')
     const checkMoveLeft = cells[currentPosition - 1].classList.contains('walls')
@@ -203,6 +206,7 @@ function init() {
     const right = 39
     removePunk(currentPosition)
     removeCoin()
+    
     if (key === right && !checkMoveRight) {
       currentPosition++
     } else if (key === left && !checkMoveLeft) {
@@ -218,19 +222,67 @@ function init() {
     }
     addPunk(currentPosition)
   }
-    //downdown even listener
-    //set movements to only go in allowed area
-    //bonus to allow movement to go from appear form one side to another
-    //check if grid trying to enter is === class wall
-      //do nothing
+  //adds cells that are legal moves to an array
+  function addAllowedMoves() {
+    cells.filter(cell => {
+      if (!cell.classList.contains('walls')) {
+        allowedMoves.push(cell)
+      }
+    })
+  }
+  
+  //starts movement of ghost after 3 seconds
+  setTimeout(releaseGhost, 3000)
+  const directions = {
+    left: -1,
+    right: +1,
+    up: -width,
+    down: +width,
+  }
+  const directionsArr = Object.keys(directions)
+  console.log(directionsArr)
+  console.log(directions['left'])
+  function ghostMovement() {
+
+    const enemyMoves = setInterval(() => {
+      
+
+      removeGhost1(ghost1Current)
+      const randPosition = Math.floor(Math.random() * directionsArr.length)
+      console.log('before', ghost1Current)
+      ghost1Current = ghost1Current + directions[directionsArr[randPosition]]
+      ///ghost potential position
+      console.log('after', ghost1Current)
+      addGhost1(ghost1Current)
+      // while (check if potential position contains class wall)) {
+      
+        
+      // } else {
+      //   console.log('false move')
+      //   clearInterval(enemyMoves)
+      // }
+      
+      console.log(ghost1Current)
+      
+    }, 5000)
     
-
-  //function ghostMovement
-    //ghostMoves = setInterval (timer makes the ghost move)
-    //releaseGhost()
-    //ghosts moves until it hits a wall
-    //if it hits a wall randomly choose a new direction
-
+    
+  } 
+  
+  function releaseGhost() {
+    const leaveHome = setInterval(() => {
+      removeGhost1(ghost1Current)
+      ghost1Current -= width
+      if (ghost1Current === 170) {
+        addGhost1(ghost1Current)
+        clearInterval(leaveHome)
+        ghostMovement()
+        
+      } else {
+        addGhost1(ghost1Current) 
+      }
+    }, 1000)
+  }
 
     //if ghost is in start box
       //run releaseGhost function (assigns ghost specific starting movement to get out of start box)
@@ -275,14 +327,6 @@ function init() {
       //add 200 points to score
     //clear interval after 10 seconds
 
-  //function getCoins
-    //if class coin is true && trader position === coin position
-      //add 10 points to score
-      //remove coin class from grid
-
-
-  //function releaseGhost
-    //function ghostMoves
 
   //function startGame when start button is clicked
     //resetRound()
