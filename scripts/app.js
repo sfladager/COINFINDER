@@ -4,7 +4,6 @@ function init() {
    
     //create start game popup with button to start game, and instructions (story?)
    
-    //add score update and life update function
     //add reset function when ghost catches trader and restart round if lives > 0, use alert for gameover
     //add powerUps to allow trader to eat ghost
     
@@ -16,7 +15,8 @@ function init() {
 
 
   // ? ELEMENTS
-  //start button
+  const welcomeScreen = document.querySelector('.welcomeScreen')
+  const gameOverScreen = document.querySelector('.gameOverScreen')
   const scoreDisplay = document.getElementById('score')
   const livesLeft = document.getElementById('lifeLeft')
   // level
@@ -27,6 +27,7 @@ function init() {
   let highScore = 0
   let score = 0
   let lives = 3
+  let coin = 175
   // level
 
   // ? GRID VARIABLES
@@ -183,6 +184,17 @@ function init() {
         //ghostsBlue()
 
   // !FUNCTIONS MOVEMENT
+  function startGame(e) {
+    if (e.target.id === 'startBtn') {
+      gameOverScreen.style.display = 'none'
+      welcomeScreen.style.display = 'none'
+      
+      
+      //starts movement of ghost after 3 seconds
+      setTimeout(releaseGhost, 3000)
+    }
+    
+  }
   
   //player movment
   function handleMovement(e) {
@@ -214,8 +226,7 @@ function init() {
     addPunk(currentPosition)
   } 
   
-  //starts movement of ghost after 3 seconds
-  setTimeout(releaseGhost, 3000)
+  
 
   //object to store movement for enemy
   const directions = {
@@ -226,9 +237,34 @@ function init() {
   }
   const directionsArr = Object.keys(directions)
   
+ 
+  //releases enemy from home
+  function releaseGhost() {
+    if (ghost1Current !== ghost1Start) {
+      console.log('ghost in wrong spot')
+      removeGhost1(ghost1Current)
+      removePunk(currentPosition)
+      ghost1Current = ghost1Start
+      currentPosition = startingPosition
+      addPunk(currentPosition)
+    }
+    addGhost1(ghost1Start)
+    const leaveHome = setInterval(() => {
+      removeGhost1(ghost1Current)
+      ghost1Current -= width
+      if (ghost1Current === 170) {
+        addGhost1(ghost1Current)
+        clearInterval(leaveHome)
+        ghostMovement()
+        
+      } else {
+        addGhost1(ghost1Current) 
+      }
+    }, 1000)
+  }
+
   ///moves enemy on interval, chooses direction, and prevents enemy from making illegal moves
   function ghostMovement() {
-
     const enemyMoves = setInterval(() => {
       removeGhost1(ghost1Current)
       let randPosition
@@ -258,6 +294,9 @@ function init() {
           if (lives > 0) {
             resetRound(ghost1Current)
           }
+          if (lives <= 0) {
+            gameOverScreen.style.display = 'block'
+          }
         }
         
       }
@@ -265,22 +304,7 @@ function init() {
     }, 1000)
  
   } 
-  //releases enemy from home
-  function releaseGhost() {
-    addGhost1(ghost1Start)
-    const leaveHome = setInterval(() => {
-      removeGhost1(ghost1Current)
-      ghost1Current -= width
-      if (ghost1Current === 170) {
-        addGhost1(ghost1Current)
-        clearInterval(leaveHome)
-        ghostMovement()
-        
-      } else {
-        addGhost1(ghost1Current) 
-      }
-    }, 1000)
-  }
+  
 
 
   //! GAME FUNCTIONS
@@ -289,6 +313,7 @@ function init() {
     if (cells[currentPosition].classList.contains('coin')) {
       cells[currentPosition].classList.remove('coin')
       score += 10
+      coin -= 1
       scoreDisplay.innerText = score
     }
   } 
@@ -392,6 +417,7 @@ function init() {
   // ? EVENTS
   //start game - run start game function and reset function
   document.addEventListener('keydown', handleMovement)
+  document.addEventListener('click', startGame)
   
 
 

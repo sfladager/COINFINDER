@@ -3,13 +3,14 @@
   font-size: 14px;
   box-sizing: border-box;
 }
-h1 {
+h1, .welcomeScreen{
   margin: 0 auto;
   text-align: center;
 }
 
 main {
 height: 100vh;
+margin-top: 20px;
 }
 
 .grid, .gameContainer {
@@ -68,4 +69,40 @@ section {
 .cyborg1 {
   background-image: url(../assets/sprites/Cyborg/Cyborg_run.png);
   background-size: cover;
+}
+
+.welcomeScreen {
+  display: block;
+  position: absolute;
+  top: 20%;
+  left: 20%;
+  height: 400px;
+  width: 400px;
+  background-color: rgba(232, 164, 3, .95);
+  border: 2px solid rgb(102 97 97);
+  border-radius: 25px;
+}
+.welcomeScreen:first-child {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 20px;
+}
+
+.gameOverScreen {
+  display: none;
+  position: absolute;
+  top: 20%;
+  left: 20%;
+  height: 400px;
+  width: 400px;
+  background-color: rgba(232, 164, 3, .95);
+  border: 2px solid rgb(102 97 97);
+  border-radius: 25px;
+}
+.gameOverScreen:first-child {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 20px;
 }
