@@ -19,16 +19,17 @@ function init() {
   const gameOverScreen = document.querySelector('.gameOverScreen')
   const scoreDisplay = document.getElementById('score')
   const livesLeft = document.getElementById('lifeLeft')
-  // level
+  const levelDisplay = document.getElementById('level')
   const grid = document.querySelector('.grid')
+  const finalScore = document.getElementById('finalScore')
 
   // ? VARIABLES
   // timer
   let highScore = 0
   let score = 0
   let lives = 3
-  let coin = 175
-  // level
+  let coins = 176
+  let level = 1
 
   // ? GRID VARIABLES
   const width = 20
@@ -129,6 +130,13 @@ function init() {
     }
   })
   
+  function addCoins() {
+    cells.some((cell) => {
+      if (!cell.classList.contains('walls') && !cell.classList.contains('enemyHome')) {
+        cell.classList.add('coin')
+      }
+    })
+  }
   
   //function addPowerUps
     //add class powerUp to specified grid index
@@ -188,8 +196,14 @@ function init() {
     if (e.target.id === 'startBtn') {
       gameOverScreen.style.display = 'none'
       welcomeScreen.style.display = 'none'
-      
-      
+      lives = 3
+      livesLeft.innerText = lives
+      score = 0
+      scoreDisplay.innerText = score
+      level = 1
+      levelDisplay.innerText = level
+      addCoins()
+
       //starts movement of ghost after 3 seconds
       setTimeout(releaseGhost, 3000)
     }
@@ -285,6 +299,7 @@ function init() {
       addGhost1(ghost1Current)
 
       endRound(ghost1Current)
+      nextLevel()
       function endRound(ghost) {
         if (cells[ghost].classList.contains('punk')) {
           console.log('life lost')
@@ -295,10 +310,23 @@ function init() {
             resetRound(ghost1Current)
           }
           if (lives <= 0) {
+            console.log(score)
+            finalScore.innerText = score
             gameOverScreen.style.display = 'block'
+            score = 0
+            lives = 3
           }
         }
-        
+      }
+      function nextLevel() {
+        if (coins <= 0) {
+          clearInterval(enemyMoves) 
+          level += 1
+          levelDisplay.innerText = level
+          coins = 176
+          addCoins()
+          resetRound(ghost1Current)
+        }
       }
 
     }, 1000)
@@ -313,8 +341,9 @@ function init() {
     if (cells[currentPosition].classList.contains('coin')) {
       cells[currentPosition].classList.remove('coin')
       score += 10
-      coin -= 1
+      coins -= 1
       scoreDisplay.innerText = score
+      console.log(coins)
     }
   } 
   function resetRound(ghost) {

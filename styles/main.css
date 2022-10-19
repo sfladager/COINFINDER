@@ -1,16 +1,27 @@
 * {
   margin: 0;
-  font-size: 14px;
+  font-size: 16px;
   box-sizing: border-box;
 }
-h1, .welcomeScreen{
+h1, .welcomeScreen, .gameOverScreen{
   margin: 0 auto;
   text-align: center;
 }
 
+h1 {
+  font-size: 2.2rem;
+}
+
+h1, p {
+  padding: 20px 0;
+}
+
+p {
+  text-align: left;
+}
+
 main {
 height: 100vh;
-margin-top: 20px;
 }
 
 .grid, .gameContainer {
@@ -24,21 +35,22 @@ margin-top: 20px;
 } */
 
 .grid {
+  margin-top: 20px;
   height: 600px;
   width: 600px;
   flex-wrap: wrap;
-  /* background-color: black; */
+  /* background-color: #4d4d4e; */
 }
 
 .grid div {
-  border: 1px solid lightgrey;
+  /* border: 1px solid #4d4d4e; */
   flex-grow: 1;
   height: calc(100% / 20);
   width: calc(100% / 20)
 }
 
 .walls {
-  background-color: orange;
+  background-color: rgb( 242, 169, 0);
 }
 
 section {
@@ -78,9 +90,10 @@ section {
   left: 20%;
   height: 400px;
   width: 400px;
-  background-color: rgba(232, 164, 3, .95);
-  border: 2px solid rgb(102 97 97);
+  background-color: rgba(242, 169, 0, .97);
+  border: 2px solid #4d4d4e;
   border-radius: 25px;
+  box-shadow: 15px 20px 5px rgba(77, 77, 78, .85);
 }
 .welcomeScreen:first-child {
   display: flex;
@@ -96,13 +109,23 @@ section {
   left: 20%;
   height: 400px;
   width: 400px;
-  background-color: rgba(232, 164, 3, .95);
-  border: 2px solid rgb(102 97 97);
+  background-color: rgba(242, 169, 0, .97);
+  border: 2px solid #4d4d4e;
   border-radius: 25px;
+  box-shadow: 15px 20px 5px rgba(77, 77, 78, .85);
 }
-.gameOverScreen:first-child {
+.gameOverScreen > div{
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
-  padding: 20px;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+#startBtn {
+  border-radius: 5px;
+  background-color: #4d4d4e;
+  color: #fff;
+  padding: 10px 20px;
+  box-shadow: 3px 7px 5px rgba(77, 77, 78, .85);
 }
