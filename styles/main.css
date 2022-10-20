@@ -87,12 +87,24 @@ section {
   background-image: url(../assets/sprites/Biker/Biker_run.png);
   background-size: cover;
 }
+.biker2 {
+  background-image: url(../assets/sprites/Biker/Biker_run.png);
+  background-size: cover;
+}
+.cyborg2 {
+  background-image: url(../assets/sprites/Cyborg/Cyborg_run.png);
+  background-size: cover;
+}
 
-.welcomeScreen {
-  display: block;
+
+.welcomeScreen, .gameOverScreen {
   position: absolute;
-  top: 20%;
-  left: 20%;
+  align-items: center;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto auto;
   height: 400px;
   width: 400px;
   background-color: rgba(242, 169, 0, .97);
@@ -100,24 +112,18 @@ section {
   border-radius: 25px;
   box-shadow: 15px 20px 5px rgba(77, 77, 78, .85);
 }
-.welcomeScreen:first-child {
+
+
+.welcomeScreen {
   display: flex;
-  flex-direction: column;
-  justify-content: space-around;
+  
+}
+.welcomeScreen:first-child, .gameOverScreen > div {
   padding: 20px;
 }
 
 .gameOverScreen {
   display: none;
-  position: absolute;
-  top: 20%;
-  left: 20%;
-  height: 400px;
-  width: 400px;
-  background-color: rgba(242, 169, 0, .97);
-  border: 2px solid #4d4d4e;
-  border-radius: 25px;
-  box-shadow: 15px 20px 5px rgba(77, 77, 78, .85);
 }
 .gameOverScreen > div{
   display: flex;

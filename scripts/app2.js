@@ -146,21 +146,28 @@ function init() {
     removeClass() {
       cells[this.currentPosition].classList.remove(`${this.className}`)
     }
+  }
+
+  class Enemy extends Character {
+    constructor(className, startingPosition, currentPosition) {
+      super(className, startingPosition, currentPosition)
+    }
     releaseEnemy() {
+      console.log('this', this)
       if (this.currentPosition !== this.startingPosition) {
         console.log('ghost in wrong spot')
         this.removeClass(this.currentPosition)
         this.currentPosition = this.startingPosition
       }
-      console.log('currentPosition', this.currentPosition)
-      console.log('startingPosition', this.startingPosition)
-      console.log('className', this.className)
+      console.log('line 161', this.currentPosition)
+      console.log('line 162', this.startingPosition)
+      console.log('line 163', this.className)
       this.addClass()
       const leaveHome = setInterval(() => {
-        this.removeClass(this.currentPosition)
+        this.removeClass()
         this.currentPosition -= width
         if (this.currentPosition === 170) {
-          this.addClass(this.currentPosition)
+          this.addClass()
           clearInterval(leaveHome)
           
           
@@ -174,45 +181,13 @@ function init() {
     }
   }
 
-  // class Enemy extends Character {
-  //   constructor(className, startingPosition, currentPosition) {
-  //     super(className, startingPosition, currentPosition)
-  //   }
-  //   releaseEnemy() {
-  //     if (this.currentPosition !== this.startingPosition) {
-  //       console.log('ghost in wrong spot')
-  //       super.removeClass(this.currentPosition)
-  //       this.currentPosition = this.startingPosition
-  //     }
-  //     console.log('line 161', this.currentPosition)
-  //     console.log('line 162', this.startingPosition)
-  //     console.log('line 163', this.className)
-  //     super.addClass()
-  //     const leaveHome = setInterval(() => {
-  //       super.removeClass(this.currentPosition)
-  //       this.currentPosition -= width
-  //       if (this.currentPosition === 170) {
-  //         super.addClass(this.currentPosition)
-  //         clearInterval(leaveHome)
-          
-          
-  //       } else {
-  //         super.addClass(this.currentPosition)
-  //       }
-  //     }, 1000)
-  //   }
-  //   enemyMoves() {
-
-  //   }
-  // }
-
   const punk = new Character('punk', 270, 270)
-  const cyborg1 = new Character('cyborg1', 210, 210)
-  const biker1 = new Character('biker1', 230, 230)
+  const cyborg1 = new Enemy('cyborg1', 210, 210)
+  const biker1 = new Enemy('biker1', 230, 230)
   console.log(punk)
   console.log(cyborg1)
   console.log(biker1)
-
+  console.log(window)
   // !FUNCTIONS MOVEMENT
   function startGame(e) {
     if (e.target.id === 'startBtn') {
@@ -226,12 +201,15 @@ function init() {
       levelDisplay.innerText = level
       addCoins()
       punk.addClass()
+      cyborg1.addClass() 
+      biker1.addClass()
+      
     
 
 
       //starts movement of ghost after 3 seconds
-      setTimeout(cyborg1.releaseEnemy, 3000)
-      setTimeout(biker1.releaseEnemy, 6000)
+      setTimeout(() => cyborg1.releaseEnemy(), 3000)
+      setTimeout(() => biker1.releaseEnemy(), 6000)
     }
   }
 
@@ -257,12 +235,13 @@ function init() {
       punk.currentPosition -= width
     } else if (key === down && !checkMoveDown) {
       punk.currentPosition += width
-    } else if (key === left && currentPosition === 200) {
+    } else if (key === left && punk.currentPosition === 200) {
       punk.currentPosition += width - 1
-    } else if (key === right && currentPosition === 219) {
+    } else if (key === right && punk.currentPosition === 219) {
       punk.currentPosition -= width - 1
     }
     punk.addClass()
+    nextLevel()
   } 
   
   
@@ -387,17 +366,17 @@ function init() {
   //   }
   // }
 //Function to move to the next level
-  nextLevel()
   function nextLevel() {
     if (coins <= 0) {
-      // clearInterval(enemyMoves1) 
-      // clearInterval(enemyMoves2) 
+      // clearInterval(enemyMoves1)
+      // clearInterval(enemyMoves2)
+      // clearInterval(enemyMoves3)
+      // clearInterval(enemyMoves4)
       level += 1
       levelDisplay.innerText = level
       coins = 176
       addCoins()
-      // resetRound(ghost1Current)
-      // resetRound(ghost2Current)
+      resetRound()
     }
   }
   
@@ -414,18 +393,19 @@ function init() {
       scoreDisplay.innerText = score
     }
   } 
-  // function resetRound() {
-  //   removeGhost1(ghost1Current)
-  //   // removeGhost2(ghost2Current)
-  //   removePunk(currentPosition) 
-  //   ghost1Current = ghost1Start
-  //   // ghost2Current = ghost2Start
-  //   currentPosition = startingPosition
+  function resetRound() {
+    // removeGhost1(ghost1Current)
+    // removeGhost2(ghost2Current)
+    punk.removeClass()
+    // ghost1Current = ghost1Start
+    // ghost2Current = ghost2Start
+    punk.currentPosition = punk.startingPosition
 
-  //   addPunk(startingPosition)
-  //   releaseGhost1()
-  //   // releaseGhost2()
-  // }
+    punk.removeClass()
+    cyborg1.releaseGhost()
+    biker1.releaseGhost()
+    
+  }
  
 
   //function getHighScore
@@ -434,76 +414,6 @@ function init() {
   //function setHighScore
     //if high score is 0 or highscore is less than current score, then save score to high score with local storage
     // diplay new high score on the page
-
-  //function endGame
-      //display game over overlay with score and high score and a start button
-    
-
-  //function resetGame
-    //when start button is clicked
-      //lives = 3
-      //display lives = 3
-      //score = 0
-      //display score = 0
-      //loadCoins()
-      //addAllGhosts()
-      //addPunk()
-      
-
-  
-    
-    
-    
-
-
-    
-  //function ghostsBlue
-    //setInterval for 10 seconds
-    //add class blue to ghosts
-    //if ghost position === trader position
-      //send ghost back to start
-      //add 200 points to score
-    //clear interval after 10 seconds
-
-
-  //function startGame when start button is clicked
-    //resetRound()
-    
-    //removePowerUps
-    //startDelay = setTimeout delay start of game by 3 seconds
-      //setTimeout for trader to 3 seconds
-        //tradermovement()
-      //releaseGhost1,2,3 = setTimeout 6,9,12 seconds
-          //1 timeout function for each ghost.
-          // ghostMovement()
-      //
-      //function checkCoins()
-        //if grid has coin class 
-          //increase score
-        // if trader gathers all the coins === coins class is false
-            //numOfCoins - subtract coin every time trader position === coin position
-              //can get coins # from a loop by looping through array to cound coins
-            //can use some method to check if coins are present
-        //if numofcoins <= 0
-          //increase level + 1
-          //score += 500
-          //resetRound()
-          //startDelay
-      //function checkPowerUps
-        //
-      //function checkEnemies()
-      // if grid has ghost css class then (player dies)
-        //stop ghost movement
-        //stop player movement
-        //decrease life by 1
-          //if lives > 0
-            //current position = start position
-            //startDelay
-          //if(lives === 0)
-            //endgame()
-
-    
-
 
 
 
