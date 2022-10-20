@@ -60,8 +60,6 @@ function init() {
       //push cell into an array
       cells.push(cell)
     }
-    addPunk(startingPosition)
-    
   }
   createGrid()
   //conditional logic to create walls and add coins
@@ -135,39 +133,85 @@ function init() {
     //remove class powerUp from specified grid index
 
   // ! CHARCTER FUNCTIONS
- 
-  function addPunk(position) {
-    cells[position].classList.add('punk')
-  }
-  function removePunk(position) {
-    cells[position].classList.remove('punk')
-  }
-  
-  function addGhost1(position) {
-    cells[position].classList.add('cyborg1')
+  class Character {
+    constructor(className, startingPosition, currentPosition) {
+      this.className = className
+      this.startingPosition = startingPosition
+      this.currentPosition = currentPosition
+    }
+    addClass() {
+      console.log(this.currentPosition)
+      cells[this.currentPosition].classList.add(`${this.className}`)
+    }
+    removeClass() {
+      cells[this.currentPosition].classList.remove(`${this.className}`)
+    }
+    releaseEnemy() {
+      if (this.currentPosition !== this.startingPosition) {
+        console.log('ghost in wrong spot')
+        this.removeClass(this.currentPosition)
+        this.currentPosition = this.startingPosition
+      }
+      console.log('currentPosition', this.currentPosition)
+      console.log('startingPosition', this.startingPosition)
+      console.log('className', this.className)
+      this.addClass()
+      const leaveHome = setInterval(() => {
+        this.removeClass(this.currentPosition)
+        this.currentPosition -= width
+        if (this.currentPosition === 170) {
+          this.addClass(this.currentPosition)
+          clearInterval(leaveHome)
+          
+          
+        } else {
+          this.addClass(this.currentPosition)
+        }
+      }, 1000)
+    }
+    enemyMoves() {
+
+    }
   }
 
-  function removeGhost1(position) {
-    cells[position].classList.remove('cyborg1')
-  }
+  // class Enemy extends Character {
+  //   constructor(className, startingPosition, currentPosition) {
+  //     super(className, startingPosition, currentPosition)
+  //   }
+  //   releaseEnemy() {
+  //     if (this.currentPosition !== this.startingPosition) {
+  //       console.log('ghost in wrong spot')
+  //       super.removeClass(this.currentPosition)
+  //       this.currentPosition = this.startingPosition
+  //     }
+  //     console.log('line 161', this.currentPosition)
+  //     console.log('line 162', this.startingPosition)
+  //     console.log('line 163', this.className)
+  //     super.addClass()
+  //     const leaveHome = setInterval(() => {
+  //       super.removeClass(this.currentPosition)
+  //       this.currentPosition -= width
+  //       if (this.currentPosition === 170) {
+  //         super.addClass(this.currentPosition)
+  //         clearInterval(leaveHome)
+          
+          
+  //       } else {
+  //         super.addClass(this.currentPosition)
+  //       }
+  //     }, 1000)
+  //   }
+  //   enemyMoves() {
 
-  function addGhost2(position) {
-    cells[position].classList.add('biker1')
-  }
-  function removeGhost2(position) {
-    cells[position].classList.remove('biker1')
-  }
+  //   }
+  // }
 
-  //function addGhost3
-    //add class addGhost3 to display the addGhost3 at start position
-
-  //function removeGhost3
-    //remove class addGhost3 to display the addGhost3 at start position
-
-  //function getPowerUps
-    //if (cointrader position === position of power up)
-        //remove power up from screen
-        //ghostsBlue()
+  const punk = new Character('punk', 270, 270)
+  const cyborg1 = new Character('cyborg1', 210, 210)
+  const biker1 = new Character('biker1', 230, 230)
+  console.log(punk)
+  console.log(cyborg1)
+  console.log(biker1)
 
   // !FUNCTIONS MOVEMENT
   function startGame(e) {
@@ -181,45 +225,44 @@ function init() {
       level = 1
       levelDisplay.innerText = level
       addCoins()
+      punk.addClass()
+    
+
 
       //starts movement of ghost after 3 seconds
-      setTimeout(releaseGhost1, 3000)
-      // setTimeout(releaseGhost2, 6000)
+      setTimeout(cyborg1.releaseEnemy, 3000)
+      setTimeout(biker1.releaseEnemy, 6000)
     }
   }
-  // function mobilizeGhosts() {
-  //   releaseGhost(ghost1Current)
-  //   releaseGhost(ghost2Current)
-  // }
-  
+
   //player movment
   function handleMovement(e) {
-    const checkMoveRight = cells[currentPosition + 1].classList.contains('walls')
-    const checkMoveLeft = cells[currentPosition - 1].classList.contains('walls')
-    const checkMoveUp = cells[currentPosition - width].classList.contains('walls')
-    const checkMoveDown = cells[currentPosition + width].classList.contains('walls')
+    const checkMoveRight = cells[punk.currentPosition + 1].classList.contains('walls')
+    const checkMoveLeft = cells[punk.currentPosition - 1].classList.contains('walls')
+    const checkMoveUp = cells[punk.currentPosition - width].classList.contains('walls')
+    const checkMoveDown = cells[punk.currentPosition + width].classList.contains('walls')
     const key = e.keyCode
     const up = 38
     const down = 40
     const left = 37
     const right = 39
-    removePunk(currentPosition)
+    punk.removeClass()
     removeCoin()
+    
     if (key === right && !checkMoveRight) {
-      currentPosition++
+      punk.currentPosition++
     } else if (key === left && !checkMoveLeft) {
-      currentPosition--
+      punk.currentPosition--
     } else if (key === up && !checkMoveUp) {
-      currentPosition -= width
+      punk.currentPosition -= width
     } else if (key === down && !checkMoveDown) {
-      currentPosition += width
+      punk.currentPosition += width
     } else if (key === left && currentPosition === 200) {
-      currentPosition += width - 1
+      punk.currentPosition += width - 1
     } else if (key === right && currentPosition === 219) {
-      currentPosition -= width - 1
+      punk.currentPosition -= width - 1
     }
-    addPunk(currentPosition)
-    nextLevel()
+    punk.addClass()
   } 
   
   
@@ -233,39 +276,38 @@ function init() {
   }
   const directionsArr = Object.keys(directions)
   
-  let enemyMoves1
-  //releases ghost 1 from home
-  function releaseGhost1() {
-    if (ghost1Current !== 210) {
-      console.log('ghost in wrong spot')
-      removeGhost1(ghost1Current)
-      removePunk(currentPosition)
-      ghost1Current = 210
-      currentPosition = startingPosition
-      addPunk(currentPosition)
-    }
-    addGhost1(ghost1Start)
-    const leaveHome = setInterval(() => {
-      removeGhost1(ghost1Current)
-      ghost1Current -= width
-      if (ghost1Current === 170) {
-        addGhost1(ghost1Current)
-        clearInterval(leaveHome)
-        enemyMoves1 = setInterval(() => {
-          removeGhost1(ghost1Current)
-          ghost1Current = choosePosition(ghost1Current)
-          console.log('updated ghost 1?', ghost1Current)
-          addGhost1(ghost1Current)
-          endRound(ghost1Current)
-        }, 750)
-        
-      } else {
-        addGhost1(ghost1Current) 
-      }
-    }, 1000)
-  }
-
  
+  //releases ghost 1 from home
+  // function releaseGhost1() {
+  //   if (ghost1Current !== 210) {
+  //     console.log('ghost in wrong spot')
+  //     removeGhost1(ghost1Current)
+  //     removePunk(currentPosition)
+  //     ghost1Current = 210
+  //     currentPosition = startingPosition
+  //     addPunk(currentPosition)
+  //   }
+  //   addGhost1(ghost1Start)
+  //   const leaveHome = setInterval(() => {
+  //     removeGhost1(ghost1Current)
+  //     ghost1Current -= width
+  //     if (ghost1Current === 170) {
+  //       addGhost1(ghost1Current)
+  //       clearInterval(leaveHome)
+  //       return enemyMoves1
+        
+  //     } else {
+  //       addGhost1(ghost1Current) 
+  //     }
+  //   }, 1000)
+  // }
+
+  // const enemyMoves1 = setInterval(() => {
+  //   removeGhost1(ghost1Current)
+  //   choosePosition(ghost1Current)
+  //   addGhost1(ghost1Current)
+  //   endRound(ghost1Current)
+  // }, 5000)
   ///moves ghost1 on interval, chooses direction, and prevents enemy from making illegal moves
 
  
@@ -302,51 +344,59 @@ function init() {
   // }, 1000)
 
    //choose the position based on a random direction
-  function choosePosition(ghost) {
+  // function choosePosition(ghost) {
     
-    let randPosition = Math.floor(Math.random() * directionsArr.length)
+  //   const randPosition = Math.floor(Math.random() * directionsArr.length)
     
-    let nextMove = ghost + directions[directionsArr[randPosition]]
+  //   const nextMove = ghost + directions[directionsArr[randPosition]]
+    
 
-    
-    while (cells[nextMove].classList.contains('walls') || cells[nextMove].classList.contains('enemyHome')) {
-      randPosition = Math.floor(Math.random() * directionsArr.length)
-      nextMove = ghost + directions[directionsArr[randPosition]]
-    }
-    return nextMove
-  }
+  //   if (cells[nextMove].classList.contains('walls')) {
+  //     console.log('contains wall', nextMove)
+  //     choosePosition(ghost)
+  //   } else if (cells[nextMove].classList.contains('enemyHome')){
+  //     console.log('contains home', nextMove)
+  //     choosePosition(ghost)
+  //   } else {
+  //     console.log('move ok', nextMove)
+  //     ghost = nextMove
+  //     console.log('updated pos', ghost)
+  //     console.log('updated ghost 1?', ghost1Current)
+      
+  //   }
+  // }
 
   //logic to end the round and takes argument of ghostcurrent location 
 
-  function endRound(ghost) {
-    if (cells[ghost].classList.contains('punk')) {
-      console.log(`${ghost} got punk`)
-      lives -= 1
-      livesLeft.innerText = lives
-      clearInterval(enemyMoves1) 
-      // clearInterval(enemyMoves2) 
-      if (lives > 0) {
-        resetRound()
-      }
-      if (lives <= 0) {
-        finalScore.innerText = score
-        gameOverScreen.style.display = 'block'
-        score = 0
-        lives = 3
-      }
-    }
-  }
-  //Function to move to the next level
-  
+  // function endRound(ghost) {
+  //   if (cells[ghost].classList.contains('punk')) {
+  //     console.log(`${ghost} got punk`)
+  //     lives -= 1
+  //     livesLeft.innerText = lives
+  //     clearInterval(enemyMoves1) 
+  //     // clearInterval(enemyMoves2) 
+  //     if (lives > 0) {
+  //       resetRound()
+  //     }
+  //     if (lives <= 0) {
+  //       finalScore.innerText = score
+  //       gameOverScreen.style.display = 'block'
+  //       score = 0
+  //       lives = 3
+  //     }
+  //   }
+  // }
+//Function to move to the next level
+  nextLevel()
   function nextLevel() {
     if (coins <= 0) {
-      clearInterval(enemyMoves1) 
+      // clearInterval(enemyMoves1) 
       // clearInterval(enemyMoves2) 
       level += 1
       levelDisplay.innerText = level
       coins = 176
       addCoins()
-      resetRound()
+      // resetRound(ghost1Current)
       // resetRound(ghost2Current)
     }
   }
@@ -357,26 +407,25 @@ function init() {
   //! GAME FUNCTIONS
   //removes coins from game and adds 10 points to score
   function removeCoin() {
-    if (cells[currentPosition].classList.contains('coin')) {
-      cells[currentPosition].classList.remove('coin')
+    if (cells[punk.currentPosition].classList.contains('coin')) {
+      cells[punk.currentPosition].classList.remove('coin')
       score += 10
       coins -= 1
       scoreDisplay.innerText = score
-      console.log(coins)
     }
   } 
-  function resetRound() {
-    removeGhost1(ghost1Current)
-    // removeGhost2(ghost2Current)
-    removePunk(currentPosition) 
-    ghost1Current = ghost1Start
-    // ghost2Current = ghost2Start
-    currentPosition = startingPosition
+  // function resetRound() {
+  //   removeGhost1(ghost1Current)
+  //   // removeGhost2(ghost2Current)
+  //   removePunk(currentPosition) 
+  //   ghost1Current = ghost1Start
+  //   // ghost2Current = ghost2Start
+  //   currentPosition = startingPosition
 
-    addPunk(startingPosition)
-    releaseGhost1()
-    // releaseGhost2()
-  }
+  //   addPunk(startingPosition)
+  //   releaseGhost1()
+  //   // releaseGhost2()
+  // }
  
 
   //function getHighScore

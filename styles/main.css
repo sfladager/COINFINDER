@@ -83,6 +83,11 @@ section {
   background-size: cover;
 }
 
+.biker1 {
+  background-image: url(../assets/sprites/Biker/Biker_run.png);
+  background-size: cover;
+}
+
 .welcomeScreen {
   display: block;
   position: absolute;
