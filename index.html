@@ -20,10 +20,10 @@
     </section>
     <section class="gameOverScreen">
       <div>
-        <h2>You Lost!</h2>
-        <p><strong>You ran out of lives &#128542</strong><br>
-          You scored <span id="finalScore"></span>!<br>
-         Prest the start button to try again!</p>
+        <h2>You ran out of lives &#128542</h2>
+        <p><strong>You scored <span id="finalScore"></span>!</strong>
+          <br>
+          Prest the start button to try again!</p>
         <button id="startBtn">Start Game</button>
       </div>
     </section>
@@ -33,12 +33,13 @@
         <div class="grid">
           <!-- Elements will injected here with JS -->
         </div>
-       
       </div>
 
       <section>
         <div id="scoreBox">
           <h4>Score: <span id="score">0</span></h4>
+        </div>
+        <div id="scoreBox">
           <h4>High Score: <span id="highScore">0</span></h4>
         </div>
         <div id="levelBox">
@@ -48,6 +49,7 @@
           <h4>Lives: <span id="lifeLeft">3</span></h4>
         </div>
       </section>
+      <audio id="audio" src="assets/collectcoin.mp3"></audio>
     </main>    
   </body>
 </html>

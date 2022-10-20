@@ -21,7 +21,8 @@ p {
 }
 
 main {
-height: 100vh;
+  height: 100vh;
+  background-color: #4d4d4e;
 }
 
 .grid, .gameContainer {
@@ -30,16 +31,16 @@ height: 100vh;
   align-items: center;
 }
 
-/* .gameContainer {
+.gameContainer {
   background-color: #000;
-} */
+}
 
 .grid {
   margin-top: 20px;
   height: 600px;
   width: 600px;
   flex-wrap: wrap;
-  /* background-color: #4d4d4e; */
+  background-color: #4d4d4e;
 }
 
 .grid div {
@@ -56,20 +57,26 @@ height: 100vh;
 section {
   display: flex;
   justify-content: space-between;
+  align-items: flex-end;
   max-width: 600px;
   margin: 0 auto;
+  padding-top: 10px;
+}
+h4 {
+  padding: 5px;
+  border: 1px solid rgb( 242, 169, 0);
+  border-radius: 10px;
+  color:rgb( 242, 169, 0)
 }
 
 .coin {
   background-image: url(../assets/bitcoin.png);
   background-position: center;
   background-repeat: no-repeat;
-  background-color: #000;
-  z-index: -1;
+  background-color: #4d4d4e;
 }
 
 .punk {
-  /* background-position: center; */
   background-size: cover;
   background-image: url(../assets/sprites/Punk/Punk_idle.png);
   animation: play .8s steps(4) infinite;
@@ -81,19 +88,28 @@ section {
 .cyborg1 {
   background-image: url(../assets/sprites/Cyborg/Cyborg_run.png);
   background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  
 }
 
 .biker1 {
   background-image: url(../assets/sprites/Biker/Biker_run.png);
   background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 .biker2 {
   background-image: url(../assets/sprites/Biker/Biker_run.png);
   background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 .cyborg2 {
   background-image: url(../assets/sprites/Cyborg/Cyborg_run.png);
   background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 

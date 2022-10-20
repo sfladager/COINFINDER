@@ -14,6 +14,7 @@ function init() {
   const levelDisplay = document.getElementById('level')
   const grid = document.querySelector('.grid')
   const finalScore = document.getElementById('finalScore')
+  const highScoreDisplay = document.querySelector('#highScore')
 
   // ? VARIABLES
   // timer
@@ -58,7 +59,7 @@ function init() {
       //creates div
       const cell = document.createElement('div')
       //display index of the element
-      cell.innerHTML = i
+      // cell.innerHTML = i
       //add index as data-id
       cell.dataset.index = i
       //appendchild to the grid
@@ -118,11 +119,6 @@ function init() {
       wall > 228 && wall < 232) {
       cell.classList.add('enemyHome')
     }
-
-    //adds coins to grid
-    // if (!cell.classList.contains('walls') && !cell.classList.contains('enemyHome')) {
-    //   cell.classList.add('coin')
-    // }
   })
   addCoins()
   function addCoins() {
@@ -132,11 +128,6 @@ function init() {
       }
     })
   }
-
-  //function addPowerUps
-  //add class powerUp to specified grid index
-  //function removePowerUps
-  //remove class powerUp from specified grid index
 
   // ! CHARCTER FUNCTIONS
 
@@ -233,7 +224,6 @@ function init() {
   const directionsArr = Object.keys(directions)
 
   //Ghost 1 movement
-  
   function releaseGhost1() {
     if (ghost1Current !== ghost1Start) {
       removeGhost1(ghost1Current)
@@ -251,7 +241,7 @@ function init() {
           ghost1Current = choosePosition(ghost1Current)
           addGhost1(ghost1Current)
           endRound(ghost1Current)
-        }, 750)
+        }, 1000)
 
       } else {
         addGhost1(ghost1Current)
@@ -286,7 +276,6 @@ function init() {
   }
 
   //Ghost 3 movement
-  
   function releaseGhost3() {
     if (ghost3Current !== ghost3Start) {
       removeGhost3(ghost3Current)
@@ -345,9 +334,19 @@ function init() {
     while (cells[nextMove].classList.contains('walls') || cells[nextMove].classList.contains('enemyHome')) {
       randPosition = Math.floor(Math.random() * directionsArr.length)
       nextMove = ghost + directions[directionsArr[randPosition]]
-      console.log(nextMove)
     }
     return nextMove
+  }
+
+  function stopTimers() {
+    clearInterval(enemyMoves1)
+    clearInterval(enemyMoves2)
+    clearInterval(enemyMoves3)
+    clearInterval(enemyMoves4)
+    clearInterval(leaveHome1)
+    clearInterval(leaveHome2)
+    clearInterval(leaveHome3)
+    clearInterval(leaveHome4)
   }
 
   //logic to end the round and takes argument of ghostcurrent location 
@@ -356,26 +355,13 @@ function init() {
       console.log(`${ghost} got punk`)
       lives -= 1
       livesLeft.innerText = lives
-      clearInterval(enemyMoves1)
-      clearInterval(enemyMoves2)
-      clearInterval(enemyMoves3)
-      clearInterval(enemyMoves4)
-      clearInterval(leaveHome1)
-      clearInterval(leaveHome2)
-      clearInterval(leaveHome3)
-      clearInterval(leaveHome4)
+      stopTimers()
       if (lives > 0) {
         resetRound()
       }
       if (lives <= 0) {
-        clearInterval(enemyMoves1)
-        clearInterval(enemyMoves2)
-        clearInterval(enemyMoves3)
-        clearInterval(enemyMoves4)
-        clearInterval(leaveHome1)
-        clearInterval(leaveHome2)
-        clearInterval(leaveHome3)
-        clearInterval(leaveHome4)
+        stopTimers()
+        setHighScore(score)
         finalScore.innerText = score
         gameOverScreen.style.display = 'block'
         score = 0
@@ -387,14 +373,7 @@ function init() {
 
   function nextLevel() {
     if (coins <= 0) {
-      clearInterval(enemyMoves1)
-      clearInterval(enemyMoves2)
-      clearInterval(enemyMoves3)
-      clearInterval(enemyMoves4)
-      clearInterval(leaveHome1)
-      clearInterval(leaveHome2)
-      clearInterval(leaveHome3)
-      clearInterval(leaveHome4)
+      stopTimers()
       level += 1
       levelDisplay.innerText = level
       coins = 176
@@ -407,6 +386,21 @@ function init() {
 
 
   //! GAME FUNCTIONS
+
+  function getHighScore (){
+    return localStorage.getItem('coinfinder-score') ? parseFloat(localStorage.getItem('coinfinder-score')) : 0
+  }
+
+  function setHighScore (score){
+    // if highscore is 0 or the current score is greater than the saved high score, then update to new high score.
+    if (!getHighScore() || getHighScore() < score){
+      // Set to localStorage
+      localStorage.setItem('coinfinder-score', score)
+      // Display new high score on the page
+      highScoreDisplay.innerHTML = getHighScore()
+    }
+  }
+
   //removes coins from game and adds 10 points to score
   function removeCoin() {
     if (cells[currentPosition].classList.contains('coin')) {
@@ -414,10 +408,13 @@ function init() {
       score += 10
       coins -= 1
       scoreDisplay.innerText = score
+      setHighScore(score)
+      highScoreDisplay.innerHTML = getHighScore()
 
     }
   }
   function resetRound() {
+    stopTimers()
     removeGhost1(ghost1Current)
     removeGhost2(ghost2Current)
     removeGhost3(ghost3Current)
