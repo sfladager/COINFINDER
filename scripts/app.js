@@ -140,11 +140,9 @@ function init() {
   function removePunk(position) {
     cells[position].classList.remove('punk')
   }
-
   function addGhost1(position) {
     cells[position].classList.add('cyborg1')
   }
-
   function removeGhost1(position) {
     cells[position].classList.remove('cyborg1')
   }
@@ -335,11 +333,19 @@ function init() {
     let randPosition = Math.floor(Math.random() * directionsArr.length)
     let nextMove = ghost + directions[directionsArr[randPosition]]
 
-    while (cells[nextMove].classList.contains('walls') || cells[nextMove].classList.contains('enemyHome')) {
+    while (cells[nextMove].classList.contains('walls') || 
+    cells[nextMove].classList.contains('enemyHome')) {
       randPosition = Math.floor(Math.random() * directionsArr.length)
       nextMove = ghost + directions[directionsArr[randPosition]]
       if (cells[ghost].classList.contains('punk')){
         endRound()
+      } 
+      if (cells[nextMove] === 200) {
+        console.log('move to cell 219')
+        nextMove += width - 1
+      } else if (cells[nextMove] === 219) {
+        console.log('move to cell 200')
+        nextMove -= width - 1
       }
     }
     return nextMove
@@ -359,7 +365,6 @@ function init() {
   //logic to end the round and takes argument of ghostcurrent location 
   function endRound(ghost) {
     if (cells[ghost].classList.contains('punk')) {
-      console.log(`${ghost} got punk`)
       lostRoundAudio.play()
       lives -= 1
       livesLeft.innerText = lives
