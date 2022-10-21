@@ -79,37 +79,33 @@ h4 {
 .punk {
   background-size: cover;
   background-image: url(../assets/sprites/Punk/Punk_idle.png);
-  animation: play .8s steps(4) infinite;
 }
 .enemyHome {
   background-color: rgb(102, 97, 97);
 }
 
 .cyborg1 {
-  background-image: url(../assets/sprites/Cyborg/Cyborg_run.png);
+  background-image: url(../assets/sprites/Cyborg/Cyborg_idle.png);
   background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
   
 }
 
 .biker1 {
-  background-image: url(../assets/sprites/Biker/Biker_run.png);
+  background-image: url(../assets/sprites/Biker/Biker_idle.png);
   background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+
 }
 .biker2 {
-  background-image: url(../assets/sprites/Biker/Biker_run.png);
+  background-image: url(../assets/sprites/Biker/Biker_idle.png);
   background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+
 }
 .cyborg2 {
-  background-image: url(../assets/sprites/Cyborg/Cyborg_run.png);
+  background-image: url(../assets/sprites/Cyborg/Cyborg_idle.png);
   background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+}
+@keyframes sprite {
+  to { background-position: -288px;}
 }
 
 
@@ -155,4 +151,10 @@ h4 {
   color: #fff;
   padding: 10px 20px;
   box-shadow: 3px 7px 5px rgba(77, 77, 78, .85);
+}
+@media only screen and (min-width: 1024px) {
+  .grid {
+    height: 800px;
+    width: 800px;
+  }
 }

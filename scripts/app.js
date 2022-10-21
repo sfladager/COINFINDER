@@ -15,10 +15,11 @@ function init() {
   const grid = document.querySelector('.grid')
   const finalScore = document.getElementById('finalScore')
   const highScoreDisplay = document.querySelector('#highScore')
+  const audio = document.getElementById('audio')
+  const lostRoundAudio = document.getElementById('lostRoundAudio')
+  const nextLevelAudio = document.getElementById('nextLevelAudio')
 
   // ? VARIABLES
-  // timer
-  let highScore = 0
   let score = 0
   let lives = 3
   let coins = 176
@@ -33,6 +34,7 @@ function init() {
 
 
   // ? CHARACTER VARIABLES
+  //variables for start positions and current position of each sprite
   const startingPosition = 270
   let currentPosition = startingPosition
   const ghost1Start = 210
@@ -44,6 +46,7 @@ function init() {
   let ghost3Current = ghost3Start
   const ghost4Start = 230
   let ghost4Current = ghost4Start
+  //global variables for timers
   let leaveHome1
   let enemyMoves1
   let leaveHome2
@@ -177,6 +180,7 @@ function init() {
       scoreDisplay.innerText = score
       level = 1
       levelDisplay.innerText = level
+      stopTimers()
       addCoins()
       resetRound()
     }
@@ -334,6 +338,9 @@ function init() {
     while (cells[nextMove].classList.contains('walls') || cells[nextMove].classList.contains('enemyHome')) {
       randPosition = Math.floor(Math.random() * directionsArr.length)
       nextMove = ghost + directions[directionsArr[randPosition]]
+      if (cells[ghost].classList.contains('punk')){
+        endRound()
+      }
     }
     return nextMove
   }
@@ -353,10 +360,12 @@ function init() {
   function endRound(ghost) {
     if (cells[ghost].classList.contains('punk')) {
       console.log(`${ghost} got punk`)
+      lostRoundAudio.play()
       lives -= 1
       livesLeft.innerText = lives
       stopTimers()
       if (lives > 0) {
+        stopTimers()
         resetRound()
       }
       if (lives <= 0) {
@@ -370,10 +379,10 @@ function init() {
     }
   }
   //Function to move to the next level
-
   function nextLevel() {
     if (coins <= 0) {
       stopTimers()
+      nextLevelAudio.play()
       level += 1
       levelDisplay.innerText = level
       coins = 176
@@ -386,22 +395,20 @@ function init() {
 
 
   //! GAME FUNCTIONS
-
+  //Gets the highscore from local storage
   function getHighScore (){
     return localStorage.getItem('coinfinder-score') ? parseFloat(localStorage.getItem('coinfinder-score')) : 0
   }
-
+  //Sets highscore if score is greater than getHighScore or if score is === 0
   function setHighScore (score){
-    // if highscore is 0 or the current score is greater than the saved high score, then update to new high score.
     if (!getHighScore() || getHighScore() < score){
-      // Set to localStorage
       localStorage.setItem('coinfinder-score', score)
-      // Display new high score on the page
       highScoreDisplay.innerHTML = getHighScore()
     }
   }
 
-  //removes coins from game and adds 10 points to score
+  //removes coins from game and adds 10 points to score. Removes the coins by checking if currenPosition of punk contains a coin.
+  //If it does, then coin class is removed and score is added. 
   function removeCoin() {
     if (cells[currentPosition].classList.contains('coin')) {
       cells[currentPosition].classList.remove('coin')
@@ -410,9 +417,10 @@ function init() {
       scoreDisplay.innerText = score
       setHighScore(score)
       highScoreDisplay.innerHTML = getHighScore()
-
+      audio.play()
     }
   }
+  //Resets the round by clearing the timers, reseting the position of all sprites and starting new timers
   function resetRound() {
     stopTimers()
     removeGhost1(ghost1Current)
@@ -425,7 +433,6 @@ function init() {
     ghost3Current = ghost3Start
     ghost4Current = ghost4Start
     currentPosition = startingPosition
-
     addPunk(startingPosition)
     setTimeout(releaseGhost1, 1000)
     setTimeout(releaseGhost2, 3000)
