@@ -239,3 +239,61 @@ This function was created to reset the position of all the characters to their s
     setTimeout(releaseGhost4, 7000)
   }
 ```
+
+# Remove Coins and Increase Score
+removeCoin function checks if the class coin exists and then removes the coin from the cell. 10 points are added to the global variable score, and 1 coin is removed from the global variable coins. The score is updated on the screen and the current score is checked against the high score. If the score is greater than the high score, then the high score will also get updated. A coin sound is played every time a coin is collected. This function is added to the player movement so it’s executed every time the player moves.
+
+```
+function removeCoin() {
+    if (cells[currentPosition].classList.contains('coin')) {
+      cells[currentPosition].classList.remove('coin')
+      score += 10
+      coins -= 1
+      scoreDisplay.innerText = score
+      setHighScore(score)
+      highScoreDisplay.innerHTML = getHighScore()
+      audio.play()
+    }
+  }
+```
+
+```
+ function nextLevel() {
+    if (coins <= 0) {
+      stopTimers()
+      nextLevelAudio.play()
+      level += 1
+      levelDisplay.innerText = level
+      coins = 176
+      addCoins()
+      resetRound()
+    }
+  }
+  ```
+
+# Challenges
+- Initially coming up with the structure of the code to make everything work together, and getting the enemies to move in the game.
+- Implementing multiple ghosts with the way I wrote the code. Needed to re-write some things to make it more dynamic. 
+- Troubleshooting why the game was crashing after 4 enemies were moving. Crashes appeared to be random. 
+
+# Wins
+- Solving the issue of infinite loops caused by the choosePosition function running wild due to timers not being completely stopped before starting again.
+- Having a fully functioning game with a start/game over pop up, levels increasing, and rounds resetting properly. 
+- Game resized appropriately for screens larger than 650px. 
+
+# Key learnings
+- One of my biggest lessons was the importance of objects and classes. I should have included them in my initial plan, and used them from the start. Having a well put together plan is critical. I planned to add classes and objects after I finished the game with 1 enemy, but I found that was not such an easy task with the way I coded things. 
+- Dynamic code reduces the amount of code needed, and makes troubleshooting much easier. The importance of “DRY” became obvious.
+- More comfortable with DOM elements and event listeners
+
+# Bugs
+- To my knoweldge the game is bug free.
+
+# Future improvements
+- I started re-writing a version 2 of the game utilizing classes with the goal of reducing the amount of code used. I plan on finishing this to improve my knowledge of classes and objects.
+- In version 2 I need to change the way I use timers, so I want to make them more dynamic and easier to clear. I also want to be able to decrement the interval for the enemy movement as the level increases.
+- Add enemy movement logic to get the enemy to chase the punk
+- Add power ups for the punk to capture the ghosts and send them back home
+- Add a bonus coin for the punk to capture each round. 
+- Option to select a player from a list of players or use your own NFT as a player
+- Improved visual appeal
