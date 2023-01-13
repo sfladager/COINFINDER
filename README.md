@@ -109,7 +109,6 @@ function addCoins() {
   }
   
 ```
-![grid-complete](/assets/Screenshots/grid-complete.png)
 
 ## Characters
 The punks were added by removing and adding the class to each cell. I manually created each function for each character. I first focused on getting the game to function with the punk and 1 cyborg, with the intention of adding the remaining enemies later. This was my biggest mistake, as I ended up hard coding a lot of things. I should have focused on utilizing classes and objects from the beginning. Below is an example of the code used to add and remove sprites from the screen.
